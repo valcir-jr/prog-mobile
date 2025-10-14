@@ -1,4 +1,4 @@
-import Cinco from "../screens/atv_tres/atv5";
+import Cinco from "../screens/atv_quatro/atv5";
 
 const App: React.FC = () => {
   return (
