@@ -1,28 +1,36 @@
 import React, { useState } from "react";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  async function login() {
-    await fetch("http://localhost:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
-  }
+  const navigation = useNavigation();
 
-  async function register() {
-    await fetch("http://localhost:3000/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ username, password }),
-    });
+  async function login() {
+    try {
+      const response = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Home" }],
+        });
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -39,6 +47,7 @@ export default function Login() {
         />
         <Text style={{ color: "white" }}>Senha</Text>
         <TextInput
+          secureTextEntry={true}
           placeholder="Digite sua senha"
           onChangeText={setPassword}
           style={styles.input}
@@ -47,7 +56,10 @@ export default function Login() {
           <Button title="Login" onPress={login} />
         </View>
         <View>
-          <Button title="Cadastrar" onPress={register} />
+          <Button
+            title="Cadastrar"
+            onPress={() => navigation.navigate("Register")}
+          />
         </View>
       </View>
     </View>
