@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../contexts/AuthProvider";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useContext(AuthContext);
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
-  async function login() {
+  async function handleLogin() {
     try {
       const response = await fetch("http://localhost:3000/login", {
         method: "POST",
@@ -21,6 +23,7 @@ export default function Login() {
       const data = await response.json();
 
       if (data.success) {
+        login(data.data.user)
         navigation.reset({
           index: 0,
           routes: [{ name: "Home" }],
@@ -53,7 +56,7 @@ export default function Login() {
           style={styles.input}
         />
         <View style={{ marginTop: 20, marginBottom: 15 }}>
-          <Button title="Login" onPress={login} />
+          <Button title="Login" onPress={handleLogin} />
         </View>
         <View>
           <Button

@@ -1,26 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { AuthContext } from "../../contexts/AuthProvider";
 import { Button, StyleSheet, Text, TextInput, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { Picker } from "@react-native-picker/picker";
 
 export default function Register() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [type, setType] = useState("1");
 
-  const navigation = useNavigation();
+  const { login } = useContext(AuthContext);
+  const navigation = useNavigation<any>();
 
-  async function register() {
+  async function handleRegister() {
     try {
       const response = await fetch("http://localhost:3000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, type }),
       });
 
       const data = await response.json();
 
       if (data.success) {
+        login(data.data.user)
         navigation.reset({
           index: 0,
           routes: [{ name: "Home" }],
@@ -52,8 +57,18 @@ export default function Register() {
           onChangeText={setPassword}
           style={styles.input}
         />
+        <Text style={{ color: "white" }}>Perfil</Text>
+        <Picker
+          selectedValue={type}
+          onValueChange={(itemValue) => setType(itemValue)}
+          style={styles.input}
+        >
+          <Picker.Item label="Aluno" value="1" />
+          <Picker.Item label="Professor" value="2" />
+          <Picker.Item label="Administrador" value="3" />
+        </Picker>
         <View style={{ marginTop: 20, marginBottom: 15 }}>
-          <Button title="Cadastrar" onPress={register} />
+          <Button title="Cadastrar" onPress={handleRegister} />
         </View>
         <View>
           <Button title="Voltar" onPress={() => navigation.goBack()} />

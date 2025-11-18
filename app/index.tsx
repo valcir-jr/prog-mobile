@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AuthProvider } from "../contexts/AuthProvider";
 import Login from "../screens/app_scholar/Login";
 import Register from "../screens/app_scholar/Register";
 import Homepage from "../screens/app_scholar/Homepage";
@@ -7,6 +8,7 @@ const Stack = createNativeStackNavigator();
 
 const App: React.FC = () => {
   return (
+    <AuthProvider>
       <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Login"
@@ -24,6 +26,7 @@ const App: React.FC = () => {
           options={{ title: "Home" }}
         />
       </Stack.Navigator>
+    </AuthProvider>
   );
 };
 
