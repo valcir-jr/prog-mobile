@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthProvider";
-import { TouchableOpacity, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity, StyleSheet, Text, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 export default function Homepage() {
@@ -16,28 +16,78 @@ export default function Homepage() {
   };
 
   return (
-    <View style={styles.container}>
-      <TouchableOpacity style={styles.button}>
-        Consultar boletim
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Boletim")}
+      >
+        <Text>Consultar boletim</Text>
       </TouchableOpacity>
-      <Text style={styles.text}>Cadastrar</Text>
-      <TouchableOpacity style={styles.button}>Disciplina</TouchableOpacity>
+
       {user && user.type > 1 && (
-        <TouchableOpacity style={styles.button}>Aluno</TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("Grades")}
+        >
+          <Text>Lançar/Alterar Notas</Text>
+        </TouchableOpacity>
       )}
+
+      <Text style={styles.text}>Cadastrar</Text>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("RegisterSubject")}
+      >
+        <Text>Disciplina</Text>
+      </TouchableOpacity>
+
+      {user && user.type > 1 && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("RegisterStudent")}
+        >
+          <Text>Aluno</Text>
+        </TouchableOpacity>
+      )}
+
       {user && user.type > 2 && (
-        <TouchableOpacity style={styles.button}>Professor</TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate("RegisterProf")}
+        >
+          <Text>Professor</Text>
+        </TouchableOpacity>
       )}
+
+      <Text style={styles.text}>Listagens</Text>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("SubjectsByProfessor")}
+      >
+        <Text>Disciplinas por professor</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("StudentsBySubject")}
+      >
+        <Text>Alunos por disciplina</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.logout} onPress={handleLogout}>
         <Text style={{ color: "white" }}>Sair</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     padding: 20,
     alignItems: "center",
   },
@@ -45,14 +95,12 @@ const styles = StyleSheet.create({
     backgroundColor: "skyblue",
     padding: 20,
     borderRadius: 5,
-    width: "50%",
-    justifyContent: "center",
-    fontFamily: "system-ui",
-    textAlign: "center",
+    width: "70%",
+    alignItems: "center",
     marginVertical: 10,
   },
   logout: {
-    margin: 100,
+    marginTop: 50,
     backgroundColor: "red",
     padding: 15,
     borderRadius: 5,
@@ -60,6 +108,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     marginBottom: 20,
-    marginTop: 60,
+    marginTop: 40,
   },
 });

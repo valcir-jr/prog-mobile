@@ -38,7 +38,6 @@ export default new Pool({
     id SERIAL PRIMARY KEY,
     name VARCHAR(255),
     registration VARCHAR(50),
-    course VARCHAR(255)
   );
 
   CREATE TABLE enrollments (
